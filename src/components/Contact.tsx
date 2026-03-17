@@ -1,30 +1,47 @@
 import FadeUp from "./FadeUp";
 import { Mail, Linkedin, Github, Instagram } from "lucide-react";
 
+const MONO = { fontFamily: "var(--ff-mono), monospace" };
+const DISPLAY = { fontFamily: "var(--ff-display), Georgia, serif" };
+const BODY = { fontFamily: "var(--ff-body), Georgia, serif" };
+
 export default function Contact() {
   return (
-    <section id="contato" className="px-[5%] py-[100px] bg-[#0d0d14] text-center">
-      <div className="max-w-[560px] mx-auto">
+    <section id="contato" className="px-[5%] py-[120px] bg-surface">
+      <div className="max-w-[640px]">
         <FadeUp>
-          <span className="inline-block text-[0.75rem] font-semibold tracking-[1.5px] uppercase text-[#34d399] mb-3">
-            // contato
-          </span>
-          <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold tracking-tight mb-4 leading-[1.15]">
-            Vamos conversar?
+          <div className="flex items-center gap-4 mb-14">
+            <span className="text-[0.62rem] tracking-[3px] uppercase text-faint" style={MONO}>06</span>
+            <div className="h-[1px] w-10 bg-ink/10" />
+            <span className="text-[0.62rem] tracking-[3px] uppercase text-muted" style={MONO}>contato</span>
+          </div>
+
+          <h2
+            className="text-[clamp(2.8rem,7vw,6rem)] font-bold italic leading-[1] tracking-tight text-ink"
+            style={DISPLAY}
+          >
+            Vamos
+            <br />
+            conversar?
           </h2>
-          <p className="text-[#94a3b8] text-[1rem] max-w-[420px] mx-auto leading-relaxed">
-            Estou aberto a oportunidades PJ/CLT em empresas que valorizam qualidade de código, design e experiência do usuário. Me chama!
+
+          <p className="text-muted text-[1rem] mt-7 max-w-[420px] leading-relaxed" style={BODY}>
+            Estou aberto a oportunidades PJ/CLT em empresas que valorizam qualidade de código, design
+            e experiência do usuário.
           </p>
 
+          {/* Email button */}
           <a
             href="mailto:contato@luizalmeida.dev"
-            className="inline-flex items-center gap-2.5 text-[#e2e8f0] text-[1.1rem] font-semibold no-underline bg-[#16161f] border border-[rgba(255,255,255,0.07)] px-7 py-3.5 rounded-xl my-10 transition-all duration-300 hover:border-[rgba(16,185,129,0.5)] hover:bg-[rgba(16,185,129,0.08)] hover:-translate-y-0.5"
+            style={MONO}
+            className="inline-flex items-center gap-3 border border-ink/12 text-muted px-7 py-4 text-[0.7rem] tracking-[2px] uppercase mt-10 transition-all duration-300 hover:border-rust/50 hover:text-rust hover:-translate-y-0.5"
           >
-            <Mail className="w-5 h-5 text-[#34d399]" />
+            <Mail className="w-4 h-4" strokeWidth={1.5} />
             contato@luizalmeida.dev
           </a>
 
-          <div className="flex justify-center flex-wrap gap-4">
+          {/* Social links */}
+          <div className="flex flex-wrap gap-3 mt-6">
             {[
               { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/luiz-almeida-front" },
               { icon: Github, label: "GitHub", href: "https://github.com/luizfeer" },
@@ -35,9 +52,10 @@ export default function Contact() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-[#94a3b8] text-[0.875rem] font-medium bg-[#16161f] border border-[rgba(255,255,255,0.07)] px-5 py-2.5 rounded-lg transition-all duration-200 hover:text-[#34d399] hover:border-[rgba(16,185,129,0.4)] hover:bg-[rgba(16,185,129,0.08)]"
+                style={MONO}
+                className="inline-flex items-center gap-2 text-faint text-[0.65rem] tracking-[1.5px] uppercase border border-ink/8 px-5 py-2.5 transition-all duration-200 hover:text-rust hover:border-rust/35"
               >
-                <social.icon className="w-4 h-4" />
+                <social.icon className="w-3.5 h-3.5" strokeWidth={1.5} />
                 {social.label}
               </a>
             ))}

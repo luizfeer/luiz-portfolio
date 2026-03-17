@@ -3,7 +3,11 @@
 import { useState } from "react";
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 import FadeUp from "./FadeUp";
-import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+
+const MONO = { fontFamily: "var(--ff-mono), monospace" };
+const DISPLAY = { fontFamily: "var(--ff-display), Georgia, serif" };
+const BODY = { fontFamily: "var(--ff-body), Georgia, serif" };
 
 const experiences = [
   {
@@ -37,21 +41,9 @@ const SWIPE_OFFSET = 60;
 const SWIPE_VELOCITY = 600;
 
 const slideVariants = {
-  enter: (direction: number) => ({
-    y: direction > 0 ? 80 : -80,
-    opacity: 0,
-    scale: 0.98,
-  }),
-  center: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-  },
-  exit: (direction: number) => ({
-    y: direction > 0 ? -80 : 80,
-    opacity: 0,
-    scale: 0.98,
-  }),
+  enter: (direction: number) => ({ y: direction > 0 ? 80 : -80, opacity: 0, scale: 0.98 }),
+  center: { y: 0, opacity: 1, scale: 1 },
+  exit: (direction: number) => ({ y: direction > 0 ? -80 : 80, opacity: 0, scale: 0.98 }),
 };
 
 export default function Experience() {
@@ -78,41 +70,37 @@ export default function Experience() {
   }
 
   function handleDragEnd(_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) {
-    const shouldGoPrev = info.offset.y > SWIPE_OFFSET || info.velocity.y > SWIPE_VELOCITY;
-    const shouldGoNext = info.offset.y < -SWIPE_OFFSET || info.velocity.y < -SWIPE_VELOCITY;
-
-    if (shouldGoPrev) {
-      prev();
-      return;
-    }
-
-    if (shouldGoNext) {
-      next();
-    }
+    if (info.offset.y > SWIPE_OFFSET || info.velocity.y > SWIPE_VELOCITY) prev();
+    else if (info.offset.y < -SWIPE_OFFSET || info.velocity.y < -SWIPE_VELOCITY) next();
   }
 
-  const currentExperience = experiences[currentIndex];
+  const exp = experiences[currentIndex];
 
   return (
-    <section id="experiencia" className="px-[5%] py-[100px]">
+    <section id="experiencia" className="px-[5%] py-[120px] bg-bg">
       <FadeUp>
-        <span className="inline-block text-[0.75rem] font-semibold tracking-[1.5px] uppercase text-[#34d399] mb-3">
-          // experiência
-        </span>
-        <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-extrabold tracking-tight mb-4 leading-[1.15]">
+        <div className="flex items-center gap-4 mb-14">
+          <span className="text-[0.62rem] tracking-[3px] uppercase text-faint" style={MONO}>03</span>
+          <div className="h-[1px] w-10 bg-ink/10" />
+          <span className="text-[0.62rem] tracking-[3px] uppercase text-muted" style={MONO}>experiência</span>
+        </div>
+        <h2
+          className="text-[clamp(2.5rem,6.5vw,5rem)] font-bold italic leading-[1.05] tracking-tight text-ink"
+          style={DISPLAY}
+        >
           Onde trabalhei
         </h2>
-        <p className="text-[#94a3b8] text-[1rem] max-w-[520px] leading-relaxed">
+        <p className="text-faint text-[0.9rem] mt-4 max-w-[440px] leading-relaxed" style={BODY}>
           Minha trajetória profissional focada em produtos de impacto real.
         </p>
       </FadeUp>
 
       <FadeUp delay={0.1}>
         <div className="mt-12">
-          <div className="relative min-h-[430px] overflow-hidden">
+          <div className="relative min-h-[400px] overflow-hidden">
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.article
-                key={currentExperience.company}
+                key={exp.company}
                 custom={direction}
                 variants={slideVariants}
                 initial="enter"
@@ -127,36 +115,42 @@ export default function Experience() {
                 dragConstraints={{ top: 0, bottom: 0 }}
                 dragElastic={0.12}
                 onDragEnd={handleDragEnd}
-                className="relative overflow-hidden bg-[#16161f] border border-[rgba(255,255,255,0.07)] rounded-2xl p-8 md:p-10 hover:border-[rgba(16,185,129,0.4)] transition-colors duration-300 cursor-grab active:cursor-grabbing touch-pan-y"
+                className="relative overflow-hidden bg-panel border border-ink/7 hover:border-rust/35 transition-colors duration-300 p-8 md:p-10 cursor-grab active:cursor-grabbing touch-pan-y"
               >
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-primary" />
-                <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-[rgba(16,185,129,0.1)] blur-3xl pointer-events-none" />
+                {/* Left accent bar */}
+                <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-rust to-gold" />
 
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+                {/* Warm glow */}
+                <div
+                  className="absolute -top-20 -right-20 w-56 h-56 rounded-full pointer-events-none"
+                  style={{ background: "radial-gradient(circle, var(--glow-accent) 0%, transparent 65%)" }}
+                />
+
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-7">
                   <div>
-                    <div className="text-2xl font-extrabold text-[#e2e8f0] mb-1">
-                      {currentExperience.company}
+                    <div className="text-[1.6rem] font-bold italic text-ink mb-1" style={DISPLAY}>
+                      {exp.company}
                     </div>
-                    <div className="text-gradient font-semibold text-[0.95rem]">
-                      {currentExperience.role}
+                    <div className="text-[0.7rem] tracking-[2px] uppercase text-rust" style={MONO}>
+                      {exp.role}
                     </div>
                   </div>
-                  <div className="inline-flex bg-[rgba(16,185,129,0.12)] border border-[rgba(16,185,129,0.25)] text-[#34d399] px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap self-start">
-                    {currentExperience.period}
+                  <div
+                    className="inline-flex border border-rust/25 text-faint px-3.5 py-1.5 text-[0.65rem] tracking-[1.5px] uppercase whitespace-nowrap self-start"
+                    style={MONO}
+                  >
+                    {exp.period}
                   </div>
                 </div>
 
-                <p className="text-[#94a3b8] text-sm italic mb-6">
-                  {currentExperience.description}
+                <p className="text-faint text-[0.875rem] italic mb-6 leading-relaxed" style={BODY}>
+                  {exp.description}
                 </p>
 
-                <ul className="flex flex-col gap-3">
-                  {currentExperience.bullets.map((bullet, idx) => (
-                    <li
-                      key={idx}
-                      className="flex gap-3 text-[#94a3b8] text-[0.925rem] leading-relaxed"
-                    >
-                      <ChevronRight className="w-3.5 h-3.5 text-[#34d399] mt-1.5 shrink-0" />
+                <ul className="flex flex-col gap-3.5">
+                  {exp.bullets.map((bullet, idx) => (
+                    <li key={idx} className="flex gap-3 text-muted text-[0.9rem] leading-relaxed" style={BODY}>
+                      <span className="text-rust mt-[6px] shrink-0 text-[0.5rem]">◆</span>
                       <span>{bullet}</span>
                     </li>
                   ))}
@@ -165,15 +159,16 @@ export default function Experience() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-center gap-4 mt-6">
+          {/* Navigation */}
+          <div className="flex items-center justify-center gap-5 mt-6">
             <button
               type="button"
               onClick={prev}
               disabled={currentIndex === 0}
               aria-label="Experiência anterior"
-              className="p-2 rounded-lg border border-[rgba(255,255,255,0.07)] text-[#94a3b8] hover:text-[#34d399] hover:border-[rgba(16,185,129,0.4)] disabled:opacity-40 disabled:pointer-events-none transition-all"
+              className="p-2 border border-ink/10 text-faint hover:text-rust hover:border-rust/40 disabled:opacity-30 disabled:pointer-events-none transition-all"
             >
-              <ChevronUp className="w-5 h-5" />
+              <ChevronUp className="w-4 h-4" />
             </button>
             <div className="flex gap-2">
               {experiences.map((_, index) => (
@@ -182,10 +177,10 @@ export default function Experience() {
                   type="button"
                   onClick={() => goTo(index)}
                   aria-label={`Ir para experiência ${index + 1}`}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`h-[3px] transition-all duration-300 ${
                     index === currentIndex
-                      ? "w-6 bg-[#34d399]"
-                      : "w-2 bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.35)]"
+                      ? "w-8 bg-rust"
+                      : "w-3 bg-ink/15 hover:bg-ink/30"
                   }`}
                 />
               ))}
@@ -195,14 +190,14 @@ export default function Experience() {
               onClick={next}
               disabled={currentIndex === CARD_COUNT - 1}
               aria-label="Próxima experiência"
-              className="p-2 rounded-lg border border-[rgba(255,255,255,0.07)] text-[#94a3b8] hover:text-[#34d399] hover:border-[rgba(16,185,129,0.4)] disabled:opacity-40 disabled:pointer-events-none transition-all"
+              className="p-2 border border-ink/10 text-faint hover:text-rust hover:border-rust/40 disabled:opacity-30 disabled:pointer-events-none transition-all"
             >
-              <ChevronDown className="w-5 h-5" />
+              <ChevronDown className="w-4 h-4" />
             </button>
           </div>
 
-          <p className="text-center text-[0.75rem] text-[#475569] mt-2">
-            Arraste para cima/baixo ou use as setas
+          <p className="text-center text-[0.6rem] tracking-[2px] text-faint mt-3 uppercase" style={MONO}>
+            arraste ou use as setas
           </p>
         </div>
       </FadeUp>

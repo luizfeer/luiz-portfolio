@@ -1,21 +1,53 @@
 @import "tailwindcss";
 
+/* ─── Light theme (default) ──────────────────────────────── */
 @theme {
-  --color-background: #050508;
-  --color-background-alt: #0d0d14;
-  --color-background-lighter: #13131e;
-  --color-card: #16161f;
-  --color-border: rgba(255, 255, 255, 0.07);
-  
-  --color-accent: #10b981;
-  --color-accent-hover: #059669;
-  --color-accent-light: #34d399;
-  
-  --color-text-primary: #e2e8f0;
-  --color-text-muted: #94a3b8;
-  --color-text-dim: #475569;
+  --color-bg:           #F7F0E3;
+  --color-surface:      #EFE7D5;
+  --color-elevated:     #E9DFC9;
+  --color-panel:        #E0D4BA;
+
+  --color-ink:          #1C1510;
+  --color-muted:        #52473E;
+  --color-faint:        #8A7E72;
+
+  --color-rust:         #B84A22;
+  --color-rust-deep:    #9A3A18;
+  --color-rust-warm:    #D45C28;
+  --color-gold:         #9A6E20;
+  --color-gold-light:   #B8852E;
 }
 
+/* ─── Dark theme overrides ───────────────────────────────── */
+html[data-theme="dark"] {
+  --color-bg:           #080605;
+  --color-surface:      #0d0a08;
+  --color-elevated:     #13100a;
+  --color-panel:        #1a1511;
+
+  --color-ink:          #EDE5D0;
+  --color-muted:        #8A7E72;
+  --color-faint:        #52473E;
+
+  --color-rust:         #C4522A;
+  --color-rust-deep:    #A8401E;
+  --color-rust-warm:    #E8734A;
+  --color-gold:         #C4903A;
+  --color-gold-light:   #DBA94E;
+}
+
+/* ─── Raw CSS vars for rgba / gradient values ───────────── */
+:root {
+  --glow-accent: rgba(196, 82, 42, 0.04);
+  --glow-gold:   rgba(196, 144, 58, 0.03);
+}
+
+html[data-theme="dark"] {
+  --glow-accent: rgba(196, 82, 42, 0.07);
+  --glow-gold:   rgba(196, 144, 58, 0.05);
+}
+
+/* ─── Layout utilities ───────────────────────────────────── */
 @utility section-padding {
   padding-top: 100px;
   padding-bottom: 60px;
@@ -23,48 +55,62 @@
   padding-right: 5%;
 }
 
+/* ─── Base reset ─────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    background-color: var(--color-background);
-    color: var(--color-text-primary);
-    line-height: 1.6;
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--ff-body), Georgia, serif;
+    line-height: 1.7;
     overflow-x: hidden;
+    transition: background-color 0.35s ease, color 0.35s ease;
   }
-  
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--color-background);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-accent);
-    border-radius: 3px;
-  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track  { background: var(--color-bg); }
+  ::-webkit-scrollbar-thumb  { background: var(--color-rust); border-radius: 2px; }
 }
 
+/* ─── Utility classes ────────────────────────────────────── */
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+    background: linear-gradient(135deg, var(--color-rust-warm), var(--color-gold));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   .bg-gradient-primary {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+    background: linear-gradient(135deg, var(--color-rust), var(--color-rust-deep));
   }
 
+  /* Grain texture overlay */
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.015;
+    mix-blend-mode: overlay;
+    transition: opacity 0.35s ease;
+  }
+
+  html[data-theme="dark"] .grain-overlay {
+    opacity: 0.028;
+  }
+
+  /* Project card image scroll */
   .project-scroll-png {
     position: absolute;
     inset: 0;
@@ -85,69 +131,53 @@
 
   .project-modal-aurora {
     background:
-      radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.2), transparent 42%),
-      radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.14), transparent 45%),
-      radial-gradient(circle at 60% 20%, rgba(52, 211, 153, 0.16), transparent 38%);
-    filter: blur(14px);
+      radial-gradient(circle at 20% 30%, rgba(196, 82, 42, 0.22), transparent 42%),
+      radial-gradient(circle at 80% 70%, rgba(196, 144, 58, 0.16), transparent 45%),
+      radial-gradient(circle at 60% 20%, rgba(232, 115, 74, 0.14), transparent 38%);
+    filter: blur(18px);
     animation: modal-aurora-shift 14s ease-in-out infinite alternate;
     will-change: transform, opacity;
     pointer-events: none;
   }
 
   .project-modal-grain {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.7px, transparent 0.7px);
+    background-image: radial-gradient(rgba(237, 229, 208, 0.06) 0.7px, transparent 0.7px);
     background-size: 3px 3px;
-    opacity: 0.09;
+    opacity: 0.12;
     animation: modal-grain-drift 10s linear infinite;
     mix-blend-mode: overlay;
     pointer-events: none;
   }
 
   @keyframes project-scroll-y {
-    0%,
-    12% {
-      background-position: center top;
-    }
-    88%,
-    100% {
-      background-position: center bottom;
-    }
+    0%, 12%   { background-position: center top; }
+    88%, 100% { background-position: center bottom; }
   }
 
   @keyframes modal-aurora-shift {
-    0% {
-      transform: translate3d(-2%, -1%, 0) scale(1);
-      opacity: 0.75;
-    }
-    50% {
-      transform: translate3d(2%, 1%, 0) scale(1.05);
-      opacity: 0.95;
-    }
-    100% {
-      transform: translate3d(-1%, 2%, 0) scale(1.02);
-      opacity: 0.8;
-    }
+    0%   { transform: translate3d(-2%, -1%, 0) scale(1);    opacity: 0.75; }
+    50%  { transform: translate3d(2%, 1%, 0)  scale(1.05);  opacity: 0.95; }
+    100% { transform: translate3d(-1%, 2%, 0) scale(1.02);  opacity: 0.8;  }
   }
 
   @keyframes modal-grain-drift {
-    0% {
-      transform: translate3d(0, 0, 0);
-    }
-    100% {
-      transform: translate3d(22px, 14px, 0);
-    }
+    0%   { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(22px, 14px, 0); }
+  }
+
+  .animate-pulse-warm {
+    animation: pulse-dot 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .project-scroll-png {
-      animation: none;
-    }
-    .project-modal-scroll-bg {
-      animation: none;
-    }
-    .project-modal-aurora {
-      animation: none;
-    }
+    .project-scroll-png,
+    .project-modal-scroll-bg,
+    .project-modal-aurora,
     .project-modal-grain {
       animation: none;
     }
