@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Space_Mono, Lora } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -38,12 +39,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body
         className={`${playfairDisplay.variable} ${spaceMono.variable} ${lora.variable} min-h-screen antialiased`}
       >
-        <div className="grain-overlay" aria-hidden="true" />
-        {children}
+        <ThemeProvider>
+          <div className="grain-overlay" aria-hidden="true" />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
