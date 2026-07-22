@@ -1,80 +1,34 @@
 import FadeUp from "./FadeUp";
 
-const MONO = { fontFamily: "var(--ff-mono), monospace" };
-const DISPLAY = { fontFamily: "var(--ff-display), Georgia, serif" };
-const BODY = { fontFamily: "var(--ff-body), Georgia, serif" };
+const stats = [
+  { value: "5+", label: "anos de experiência" },
+  { value: "40+", label: "projetos entregues" },
+  { value: "100%", label: "compromisso com o craft" },
+];
 
 export default function About() {
   return (
-    <section id="sobre" className="px-[5%] py-[120px] bg-surface">
-      <FadeUp>
-        <div className="flex items-center gap-4 mb-14">
-          <span className="text-[0.62rem] tracking-[3px] uppercase text-faint" style={MONO}>02</span>
-          <div className="h-[1px] w-10 bg-ink/10" />
-          <span className="text-[0.62rem] tracking-[3px] uppercase text-muted" style={MONO}>sobre mim</span>
+    <section id="sobre" className="section-pad border-b-2 border-black bg-[#faf8f2]">
+      <div className="site-shell">
+        <FadeUp>
+          <span className="eyebrow">Sobre mim</span>
+          <div className="grid gap-12 lg:grid-cols-[.85fr_1.15fr]">
+            <h2 className="section-title">Não é só tela bonita. É produto que funciona.</h2>
+            <div className="body-copy space-y-5 text-[1.05rem]">
+              <p>Sou desenvolvedor frontend de Carmo do Rio Claro, Minas Gerais. Trabalho no encontro entre engenharia e design para criar experiências digitais úteis, acessíveis e rápidas.</p>
+              <p>No dia a dia, transformo fluxos complexos em interfaces simples com <strong className="text-black">Vue, Nuxt, React e TypeScript</strong>. Gosto de sistemas bem pensados, código que o time consegue evoluir e detalhes que o usuário percebe — mesmo sem saber explicar.</p>
+            </div>
+          </div>
+        </FadeUp>
+
+        <div className="mt-16 grid overflow-hidden rounded-[20px] border-2 border-black md:grid-cols-3">
+          {stats.map((stat, index) => (
+            <FadeUp key={stat.label} delay={0.08 * index} className={`p-7 md:p-9 ${index > 0 ? "border-t-2 border-black md:border-l-2 md:border-t-0" : ""} ${index === 1 ? "bg-[#b9ff66]" : "bg-[#f3f0e8]"}`}>
+              <div className="text-5xl font-extrabold tracking-[-.07em] md:text-6xl">{stat.value}</div>
+              <div className="mt-2 text-sm font-bold text-[#5d5b55]">{stat.label}</div>
+            </FadeUp>
+          ))}
         </div>
-        <h2
-          className="text-[clamp(2.5rem,6.5vw,5rem)] font-bold italic leading-[1.05] tracking-tight text-ink"
-          style={DISPLAY}
-        >
-          Quem sou eu
-        </h2>
-      </FadeUp>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 mt-16 items-start">
-        <FadeUp delay={0.1}>
-          <div className="space-y-6" style={BODY}>
-            <p className="text-muted text-[1rem] leading-relaxed">
-              Sou{" "}
-              <strong className="text-ink font-semibold">Luiz Almeida</strong>, desenvolvedor frontend
-              de{" "}
-              <strong className="text-ink font-semibold">Carmo do Rio Claro, Minas Gerais</strong>.
-              Tenho foco em criar interfaces que não apenas funcionam, mas que as pessoas gostam de
-              usar — responsivas, acessíveis e rápidas.
-            </p>
-            <p className="text-muted text-[1rem] leading-relaxed">
-              Trabalho com{" "}
-              <strong className="text-ink font-semibold">Vue, Nuxt, React e TypeScript</strong> no
-              dia a dia, sempre atento à qualidade do código, performance e experiência do usuário.
-              Acredito que grandes produtos nascem da colaboração entre design e desenvolvimento.
-            </p>
-            <p className="text-muted text-[1rem] leading-relaxed">
-              Em meus projetos, acumulo mais de{" "}
-              <strong className="text-ink font-semibold">5 anos de experiência</strong> desenvolvendo
-              produtos digitais com foco em resultado, usabilidade e escalabilidade.
-            </p>
-          </div>
-        </FadeUp>
-
-        {/* Stats grid with gap-px editorial trick */}
-        <FadeUp delay={0.2}>
-          <div className="grid grid-cols-2 gap-px bg-ink/6">
-            {[
-              { num: "5+", label: "Anos de\nexperiência" },
-              { num: "40+", label: "Projetos\nentregues" },
-              { num: "100%", label: "Dedicação\nao craft" },
-              { num: "∞", label: "Curiosidade\ntécnica" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-surface p-8 hover:bg-panel transition-colors duration-300 group"
-              >
-                <div
-                  className="text-[3.2rem] font-black italic leading-none mb-2 text-gradient"
-                  style={DISPLAY}
-                >
-                  {stat.num}
-                </div>
-                <div
-                  className="text-[0.62rem] text-faint tracking-[1.5px] uppercase group-hover:text-muted transition-colors whitespace-pre-line"
-                  style={MONO}
-                >
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </FadeUp>
       </div>
     </section>
   );

@@ -1,242 +1,118 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, X } from "lucide-react";
 import FadeUp from "./FadeUp";
-import { ExternalLink, X } from "lucide-react";
-
-const MONO = { fontFamily: "var(--ff-mono), monospace" };
-const DISPLAY = { fontFamily: "var(--ff-display), Georgia, serif" };
-const BODY = { fontFamily: "var(--ff-body), Georgia, serif" };
 
 const projects = [
   {
     title: "ClicLaw",
-    subtitle: "Ferramenta de produtividade com IA",
-    desc: "Plataforma que conecta agentes de IA (Claude, Codex) ao Telegram, permitindo controlar seus processos de servidor remotamente sem precisar instalar nada. Landing page desenvolvida do zero com Next.js e animações avançadas.",
+    number: "01",
+    category: "Open source · IA",
+    summary: "Controle agentes de IA pelo Telegram, de qualquer lugar.",
+    description: "Plataforma que conecta agentes como Claude e Codex ao Telegram, permitindo acompanhar e controlar processos de servidor remotamente. Landing page construída do zero com Next.js e motion design.",
     tech: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    imgSrc: "/projects/cliclaw.webp?v=9",
-    badge: "Open Source",
+    image: "/projects/cliclaw.webp?v=9",
     link: "https://cliclaw.luizalmeida.dev/",
+    color: "#b9ff66",
   },
   {
     title: "IngressoFácil",
-    subtitle: "Plataforma de ingressos para eventos",
-    desc: "Sistema completo para criação e venda de ingressos com suporte a filas virtuais, salas de espera e gerenciamento de capacidade. Taxa de apenas 3% no PIX para organizadores.",
+    number: "02",
+    category: "Micro SaaS · Eventos",
+    summary: "Venda de ingressos simples para quem organiza e para quem compra.",
+    description: "Sistema completo para criação e venda de ingressos com filas virtuais, salas de espera e gerenciamento de capacidade.",
     tech: ["Vue.js", "TypeScript", "REST API", "Stripe"],
-    imgSrc: "/projects/ingressofacil.webp?v=9",
-    badge: "Micro SaaS",
+    image: "/projects/ingressofacil.webp?v=9",
     link: "https://ingressofacil.online",
+    color: "#ffb7e5",
   },
   {
     title: "Litúrgico",
-    subtitle: "App de leitura bíblica e litúrgica",
-    desc: "Plataforma de leitura da Bíblia, Lecionário e devocionais com foco em design minimalista e experiência de leitura agradável. Suporte a múltiplas traduções e ano litúrgico.",
+    number: "03",
+    category: "Produto · Conteúdo",
+    summary: "Leitura bíblica e litúrgica com calma, contexto e foco.",
+    description: "Plataforma para leitura da Bíblia, Lecionário e devocionais, com múltiplas traduções e foco em uma experiência confortável.",
     tech: ["React", "TypeScript", "Markdown", "Expo"],
-    imgSrc: "/projects/liturgico.webp?v=9",
-    badge: "App",
+    image: "/projects/liturgico.webp?v=9",
     link: "https://liturgico.com.br",
+    color: "#ffca56",
   },
 ];
 
+type Project = (typeof projects)[number];
+
 export default function Projects() {
-  const [activeProject, setActiveProject] = useState<(typeof projects)[number] | null>(null);
+  const [active, setActive] = useState<Project | null>(null);
 
   useEffect(() => {
-    if (!activeProject) return;
-    const prev = document.body.style.overflow;
-    const onEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveProject(null);
-    };
+    if (!active) return;
+    const close = (event: KeyboardEvent) => event.key === "Escape" && setActive(null);
     document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onEscape);
+    window.addEventListener("keydown", close);
     return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onEscape);
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", close);
     };
-  }, [activeProject]);
+  }, [active]);
 
   return (
-    <section id="projetos" className="px-[5%] py-[120px] bg-bg">
-      <FadeUp>
-        <div className="flex items-center gap-4 mb-14">
-          <span className="text-[0.62rem] tracking-[3px] uppercase text-faint" style={MONO}>05</span>
-          <div className="h-[1px] w-10 bg-ink/10" />
-          <span className="text-[0.62rem] tracking-[3px] uppercase text-muted" style={MONO}>projetos</span>
-        </div>
-        <h2
-          className="text-[clamp(2.5rem,6.5vw,5rem)] font-bold italic leading-[1.05] tracking-tight text-ink"
-          style={DISPLAY}
-        >
-          Projetos em destaque
-        </h2>
-        <p className="text-faint text-[0.9rem] mt-4 max-w-[440px] leading-relaxed" style={BODY}>
-          Produtos reais que desenvolvi, do design à produção.
-        </p>
-      </FadeUp>
+    <section id="projetos" className="section-pad border-b-2 border-black">
+      <div className="site-shell">
+        <FadeUp>
+          <span className="eyebrow">Projetos selecionados</span>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <h2 className="section-title max-w-3xl">Trabalho que saiu do slide e chegou nas pessoas.</h2>
+            <p className="max-w-sm text-[#5d5b55]">Produtos pensados e construídos de ponta a ponta, com impacto real.</p>
+          </div>
+        </FadeUp>
 
-      <LayoutGroup>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-ink/6 mt-14">
-          {projects.map((proj, idx) => (
-            <FadeUp key={proj.title} delay={0.1 + idx * 0.1} className="h-full">
-              <motion.button
-                layoutId={`project-card-${proj.title}`}
-                type="button"
-                onClick={() => setActiveProject(proj)}
-                aria-label={`Abrir detalhes do projeto ${proj.title}`}
-                className="group bg-bg overflow-hidden flex flex-col h-full w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rust focus-visible:ring-offset-2 focus-visible:ring-offset-bg hover:bg-panel transition-colors duration-300"
-              >
-                {/* Image area */}
-                <div className="relative overflow-hidden h-[200px] bg-surface">
-                  <div
-                    className="project-scroll-png"
-                    style={{ backgroundImage: `url(${proj.imgSrc})` }}
-                    aria-hidden="true"
-                  />
-                  <div
-                    className="absolute top-3 left-3 z-10 inline-flex items-center px-2.5 py-1 border border-rust/40 text-rust text-[0.6rem] font-bold tracking-[2px] uppercase"
-                    style={{ ...MONO, background: "color-mix(in oklch, var(--color-bg) 85%, transparent)" }}
-                  >
-                    {proj.badge}
+        <div className="mt-16 space-y-7">
+          {projects.map((project, index) => (
+            <FadeUp key={project.title} delay={index * 0.07}>
+              <button type="button" onClick={() => setActive(project)} className="group grid w-full overflow-hidden rounded-[20px] border-2 border-black bg-[#faf8f2] text-left shadow-[6px_6px_0_#111] transition-transform hover:-translate-y-1 lg:grid-cols-[1.05fr_.95fr]">
+                <div className="flex min-h-[330px] flex-col p-7 md:p-10">
+                  <div className="flex items-start justify-between">
+                    <span className="pill" style={{ backgroundColor: project.color }}>{project.category}</span>
+                    <span className="text-sm font-extrabold text-[#3155ff]">{project.number}</span>
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ background: "color-mix(in oklch, var(--color-bg) 85%, transparent)" }}>
-                    <span
-                      className="inline-flex items-center gap-2 text-ink text-[0.68rem] tracking-[2px] uppercase border border-ink/30 px-5 py-2.5 group-hover:-translate-y-0.5 transition-transform duration-300"
-                      style={MONO}
-                    >
-                      Ver detalhes <ExternalLink className="w-3 h-3" />
-                    </span>
+                  <div className="mt-auto pt-20">
+                    <h3 className="text-[clamp(2.4rem,5vw,5rem)] font-extrabold leading-none tracking-[-.065em]">{project.title}</h3>
+                    <div className="mt-6 flex items-end justify-between gap-6 border-t-2 border-black pt-5">
+                      <p className="max-w-lg text-base font-semibold text-[#55534e] md:text-lg">{project.summary}</p>
+                      <span className="grid size-12 shrink-0 place-items-center rounded-full bg-black text-white transition-transform group-hover:rotate-45"><ArrowUpRight /></span>
+                    </div>
                   </div>
                 </div>
-
-                {/* Card content */}
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="text-[1.2rem] font-bold italic text-ink mb-1.5" style={DISPLAY}>
-                    {proj.title}
-                  </div>
-                  <div className="text-[0.65rem] tracking-[1.5px] uppercase text-rust mb-4" style={MONO}>
-                    {proj.subtitle}
-                  </div>
-                  <p className="text-faint text-[0.875rem] leading-relaxed mb-5 flex-1" style={BODY}>
-                    {proj.desc}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mt-auto">
-                    {proj.tech.map((t) => (
-                      <span
-                        key={t}
-                        style={MONO}
-                        className="border border-ink/8 text-faint px-2 py-0.5 text-[0.6rem] tracking-[1px] uppercase"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+                <div className="relative min-h-[300px] overflow-hidden border-t-2 border-black bg-[#d9d6ce] lg:border-l-2 lg:border-t-0">
+                  <div className="project-scroll-png" style={{ backgroundImage: `url(${project.image})` }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
-              </motion.button>
+              </button>
             </FadeUp>
           ))}
         </div>
+      </div>
 
-        {/* Project modal */}
-        <AnimatePresence>
-          {activeProject && (
-            <motion.div
-              className="fixed inset-0 z-[120]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-            >
-              <div
-                className="absolute inset-0 bg-bg/65"
-                onClick={() => setActiveProject(null)}
-                aria-hidden="true"
-              />
-              <div
-                className="absolute inset-0 project-modal-scroll-bg"
-                style={{ backgroundImage: `url(${activeProject.imgSrc})` }}
-                aria-hidden="true"
-              />
-              <div className="absolute inset-0 project-modal-aurora" aria-hidden="true" />
-              <div className="absolute inset-0 project-modal-grain" aria-hidden="true" />
-              <div className="absolute inset-0 bg-gradient-to-t from-bg/70 via-bg/50 to-bg/25" />
-
-              <div className="relative h-full w-full px-4 py-6 md:px-8 md:py-10 flex items-center justify-center">
-                <motion.div
-                  layoutId={`project-card-${activeProject.title}`}
-                  className="w-full max-w-[860px] border border-ink/15 shadow-[0_40px_100px_rgba(0,0,0,0.4)] p-7 md:p-10"
-                  style={{ background: "color-mix(in oklch, var(--color-bg) 88%, transparent)", backdropFilter: "blur(24px)" }}
-                >
-                  <div className="flex items-start justify-between gap-4 mb-6">
-                    <div>
-                      <div
-                        className="inline-flex items-center border border-rust/40 text-rust px-2.5 py-1 text-[0.6rem] tracking-[2px] uppercase mb-4"
-                        style={MONO}
-                      >
-                        {activeProject.badge}
-                      </div>
-                      <h3
-                        className="text-[2rem] md:text-[2.5rem] font-bold italic text-ink leading-tight"
-                        style={DISPLAY}
-                      >
-                        {activeProject.title}
-                      </h3>
-                      <p className="text-[0.68rem] tracking-[2px] uppercase text-rust mt-2" style={MONO}>
-                        {activeProject.subtitle}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveProject(null)}
-                      aria-label="Fechar modal"
-                      className="inline-flex items-center justify-center w-9 h-9 border border-ink/15 text-faint hover:border-rust/40 hover:text-rust transition-colors shrink-0"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <p className="text-muted text-[0.95rem] leading-relaxed mb-7" style={BODY}>
-                    {activeProject.desc}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {activeProject.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        style={MONO}
-                        className="border border-rust/30 text-rust px-2.5 py-1 text-[0.65rem] tracking-[1.5px] uppercase"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-wrap gap-3">
-                    <a
-                      href={activeProject.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={MONO}
-                      className="inline-flex items-center gap-2 bg-rust text-ink px-6 py-3 text-[0.7rem] tracking-[2px] uppercase font-bold hover:bg-rust-deep transition-colors"
-                    >
-                      Acessar site <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() => setActiveProject(null)}
-                      style={MONO}
-                      className="inline-flex items-center px-6 py-3 border border-ink/15 text-faint text-[0.7rem] tracking-[2px] uppercase hover:border-rust/40 hover:text-rust transition-colors"
-                    >
-                      Voltar
-                    </button>
-                  </div>
-                </motion.div>
+      <AnimatePresence>
+        {active && (
+          <motion.div className="fixed inset-0 z-[100] grid place-items-center p-4 md:p-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <button className="absolute inset-0 bg-black/70" onClick={() => setActive(null)} aria-label="Fechar detalhes" />
+            <div className="absolute inset-0 project-modal-scroll-bg opacity-25" style={{ backgroundImage: `url(${active.image})` }} />
+            <motion.article initial={{ y: 30, scale: .98 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: .98 }} className="relative max-h-[90vh] w-full max-w-3xl overflow-auto rounded-[22px] border-2 border-black bg-[#f3f0e8] p-7 shadow-[8px_8px_0_#3155ff] md:p-11">
+              <div className="flex items-start justify-between gap-5">
+                <span className="pill" style={{ backgroundColor: active.color }}>{active.category}</span>
+                <button type="button" onClick={() => setActive(null)} className="grid size-11 place-items-center rounded-full border-2 border-black" aria-label="Fechar"><X size={19} /></button>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </LayoutGroup>
+              <h3 className="mt-12 text-[clamp(3rem,8vw,6rem)] font-extrabold leading-none tracking-[-.07em]">{active.title}</h3>
+              <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#55534e]">{active.description}</p>
+              <div className="mt-8 flex flex-wrap gap-2">{active.tech.map((item) => <span key={item} className="pill bg-white">{item}</span>)}</div>
+              <a href={active.link} target="_blank" rel="noreferrer" className="mt-10 inline-flex items-center gap-3 rounded-full bg-[#3155ff] px-6 py-3.5 font-extrabold text-white">Visitar projeto <ArrowUpRight size={19} /></a>
+            </motion.article>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
